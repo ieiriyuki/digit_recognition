@@ -22,13 +22,25 @@ y_train = proced_data['y_train']
 y_test = proced_data['y_test']
 pca = proced_data['pca']
 
-clf = LogisticRegression()
+clf = LogisticRegression(multi_class='multinomial',\
+    solver='saga', max_iter=100)
+
 x_train_pca = pca.transform(x_train_scale)
 x_test_pca = pca.transform(x_test_scale)
 clf.fit(x_train_pca, y_train)
 
 train_pred = clf.predict(x_train_pca)
-print('accuracy: {0}'.format(mtr.accuracy_score(y_train, train_pred)))
+print('train accuracy: {0}'.format(mtr.accuracy_score(y_train, train_pred)))
+
+test_pred = clf.predict(x_test_pca)
+print('test accuracy: {0}'.format(mtr.accuracy_score(y_test, test_pred)))
+
+model = './pickles/lf_model.pickle'
+try:
+    with open(model, 'wb') as sp:
+        pickle.dump(clf,sp)
+except Exception as e:
+    print('Unable to save {0} : {1}'.format(model, e))
 
 
 # end of file
