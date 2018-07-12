@@ -2,4 +2,5 @@
 .gitignore
 data/train.csv
 dgenv
+pickles
 __pycache__
